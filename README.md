@@ -17,6 +17,7 @@ Simply clone this repo and include all files in the src folder into your project
 ### Usage
 ```
 #include "QPowerShell.h"
+
 // Initialize a new QPowerShell Object.
     QPowerShell *ps = new QPowerShell(this);
     
