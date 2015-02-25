@@ -62,7 +62,7 @@ The signal will return a bool if the command ran successfully. If it did not, th
 
 ### Special Thanks
 * [Dale Buckley] - So many things I can no longer keep track.
-* [Miha Čančula] - For answering my silly questions and providing helpful hints and guidance.
+* [Miha Čančula] - For answering my silly questions and providing helpful hints and priceless guidance.
 
 [Dale Buckley]:https://github.com/dlbuckley
 [Miha Čančula]:https://github.com/Noughmad
