@@ -1,29 +1,46 @@
 ﻿# QPwerShell
 QPowerShell provides Qt C++ developers a simple way to interact with the Windows PowerShell CLI. It has only been tested and with PS 2.0 but should also with newer versions.
 This is my first project ever released to the public. Please feel free to submit bugs, suggestions, or feature requests.
+
 ### Installation
 Simply clone this repo and include all files in the src folder into your project.
+
+### Useful Bits
+- A QPowerShell instance creates PowerShell.exe processes and hooks their STDIN and STDOUT streams.
+- The PS interface is called QPowerShellPipeline.
+- When pipelines are created they are stored in a pool held by the QPowerShell instance.
+- You can ask the QPowerShell instance for an available pipe by calling the QPowerShell::nextAvailablePipe which returns a pointer to an available (Not currently executing a PS command / reading a response) pipe or null if there are none.
+- You can query the number of available pipes by calling QPowerShell::availablePipes.
+- You can close a specific pipe by calling QPowerShell::closePipe
+- Or close all pipes by calling QPowerShell::closeAllPipes
+
 ### Usage
 ```
 #include "QPowerShell.h"
 // Initialize a new QPowerShell Object.
     QPowerShell *ps = new QPowerShell(this);
+    
 // Set the maximum number of allowed pipes (PowerShell Processes). Default = 5.
     ps->setMaxPipes(3);
+    
 // Connect to it's finished signal:
     QObject::connect(ps, &QPowerShell::pipeFinished, this, &SomeClass::someSlot);
+    
 // Create a new pipe. Pipes are owned by the PowerShell instance (ps).
 // You can optionally set a description to keep track of which one is returning.
     QPowerShellPipeline *pipe1 = ps->newPipe();
     pipe->setDescription("Number One!!!111");
-// Add your the commands you would like executed. You can chain commands, parameters, and statements but only in the order they would make sense. Example: Get-Host | Get-ChildItem throws an error and does not make sense. You must use valid PS comands.
-// Statements will ALWAYS execute last and in the order they are added.
+    
+// Add your the commands you would like executed. You can chain commands, parameters, and statements but only in the order they would make sense.
+// Example: Get-Host | Get-ChildItem throws an error and does not make sense. You must use valid PS comands.
+// Note: Statements will ALWAYS execute last and in the order they are added.
     pipe1->addCommand("Get-ChildItem")
             .addParam("-Path", "C:\\")
             .addCommand("Where-Object")
             .addParam("-FilterScript", "{$_.Extension -eq \".txt\"}")
             .addStatement("ECHO \"Well aren't you a Qt pie...\"")
             .addStatement("ECHO \";)\"");
+            
 // Run the command, listen for the finished signal.
     pipe1->invoke();
 ```
@@ -31,8 +48,10 @@ Simply clone this repo and include all files in the src folder into your project
 ```
 - void pipeFinished(QPowerShellPipeline *pipe, bool success, QPowerShellPipeline::QPSError error, const QByteArray &result);
 ```
+
 ### QPSError Struct
 The signal will return a bool if the command ran successfully. If it did not, the error object is populated with the error source (QPowerShellErrorSrc) a friendly error message (errorMessage) and then the raw PS error (rawErrorMessage).
+
 ### Future Improvements with no ETA / order.
  - Queue commands and return when all have finished.
  - Result parser object / scheme.
