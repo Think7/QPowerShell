@@ -1,4 +1,4 @@
-﻿# QPwerShell
+﻿# QPowerShell
 QPowerShell provides Qt C++ developers a simple way to interact with the Windows PowerShell CLI. It has only been tested and with PS 2.0 but should also with newer versions.
 This is my first project ever released to the public. Please feel free to submit bugs, suggestions, or feature requests.
 
